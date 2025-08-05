@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import '../../../../core/auth/auth_service.dart';
 import '../../../../core/error/failures.dart';
+import '../../../../core/logging/app_logger.dart';
 import '../../domain/entities/todo.dart';
 import '../../domain/repositories/todo_repository.dart';
 import '../datasources/todo_local_data_source.dart';
@@ -21,25 +22,68 @@ class TodoRepositoryImpl implements TodoRepository {
 
   @override
   Future<Either<Failure, List<Todo>>> getTodos() async {
+    AppLogger.logApp('TodoRepository - Getting todos', category: 'REPOSITORY');
+
     final user = authService.getCurrentUser();
     if (user == null) {
+      AppLogger.logApp(
+        'TodoRepository - User not authenticated',
+        category: 'REPOSITORY',
+        level: LogLevel.error,
+      );
       return Left(UnexpectedFailure('User not authenticated'));
     }
+
+    AppLogger.logUserAction('Get todos', userId: user.uid);
 
     try {
       // Try to get from remote first
       final remoteTodos = await remoteDataSource.getTodos(user.uid);
 
-      // Update local cache with remote data
-      await _syncLocalCache(remoteTodos);
+      AppLogger.logFirestore(
+        'GET',
+        'users/${user.uid}/todos',
+        resultCount: remoteTodos.length,
+      );
+
+      // Cache locally
+      for (final todo in remoteTodos) {
+        await localDataSource.addTodo(todo);
+      }
+
+      AppLogger.logApp(
+        'TodoRepository - Todos retrieved successfully from remote',
+        category: 'REPOSITORY',
+        data: {'count': remoteTodos.length},
+      );
 
       return Right(remoteTodos);
     } catch (e) {
+      AppLogger.logApp(
+        'TodoRepository - Remote fetch failed, trying local cache',
+        category: 'REPOSITORY',
+        data: {'error': e.toString()},
+        level: LogLevel.warning,
+      );
+
       // Fallback to local data if remote fails
       try {
         final localTodos = await localDataSource.getTodos();
+
+        AppLogger.logApp(
+          'TodoRepository - Todos retrieved from local cache',
+          category: 'REPOSITORY',
+          data: {'count': localTodos.length},
+        );
+
         return Right(localTodos);
       } catch (localError) {
+        AppLogger.logApp(
+          'TodoRepository - Both remote and local fetch failed',
+          category: 'REPOSITORY',
+          data: {'error': localError.toString()},
+          level: LogLevel.error,
+        );
         return Left(CacheFailure());
       }
     }
@@ -176,37 +220,6 @@ class TodoRepositoryImpl implements TodoRepository {
       } catch (localError) {
         return Left(CacheFailure());
       }
-    }
-  }
-
-  /// Synchronizes local cache with remote data
-  Future<void> _syncLocalCache(List<TodoModel> remoteTodos) async {
-    try {
-      // Get current local todos
-      final localTodos = await localDataSource.getTodos();
-      final localTodoIds = localTodos.map((todo) => todo.id).toSet();
-
-      // Add or update todos from remote
-      for (final remoteTodo in remoteTodos) {
-        if (localTodoIds.contains(remoteTodo.id)) {
-          // Update existing todo
-          await localDataSource.updateTodo(remoteTodo);
-        } else {
-          // Add new todo
-          await localDataSource.addTodo(remoteTodo);
-        }
-      }
-
-      // Remove todos that exist locally but not remotely
-      final remoteTodoIds = remoteTodos.map((todo) => todo.id).toSet();
-      for (final localTodo in localTodos) {
-        if (!remoteTodoIds.contains(localTodo.id)) {
-          await localDataSource.deleteTodo(localTodo.id);
-        }
-      }
-    } catch (e) {
-      // If sync fails, we'll just continue with remote data
-      // Local cache will be updated on next successful operation
     }
   }
 }

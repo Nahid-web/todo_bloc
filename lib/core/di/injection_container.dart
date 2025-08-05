@@ -4,6 +4,15 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../auth/auth_service.dart';
+import '../../features/auth/data/datasources/auth_local_data_source.dart';
+import '../../features/auth/data/datasources/auth_remote_data_source.dart';
+import '../../features/auth/data/repositories/auth_repository_impl.dart';
+import '../../features/auth/domain/repositories/auth_repository.dart';
+import '../../features/auth/domain/usecases/create_user_with_email_and_password.dart';
+import '../../features/auth/domain/usecases/get_current_user.dart';
+import '../../features/auth/domain/usecases/sign_in_anonymously.dart';
+import '../../features/auth/domain/usecases/sign_in_with_email_and_password.dart';
+import '../../features/auth/domain/usecases/sign_out.dart';
 import '../../features/todo/data/datasources/todo_local_data_source.dart';
 import '../../features/todo/data/datasources/todo_remote_data_source.dart';
 import '../../features/todo/data/repositories/todo_repository_impl.dart';
@@ -44,18 +53,34 @@ Future<void> init() async {
   );
 
   // Auth Bloc
-  sl.registerFactory(() => AuthBloc(authService: sl()));
+  sl.registerFactory(
+    () => AuthBloc(
+      signInAnonymouslyUseCase: sl(),
+      signInWithEmailAndPasswordUseCase: sl(),
+      createUserWithEmailAndPasswordUseCase: sl(),
+      signOutUseCase: sl(),
+      getCurrentUserUseCase: sl(),
+      authRepository: sl(),
+    ),
+  );
 
-  // Use cases
+  // Use cases - Todo
   sl.registerLazySingleton(() => GetTodos(sl()));
   sl.registerLazySingleton(() => GetTodoById(sl()));
   sl.registerLazySingleton(() => AddTodo(sl()));
   sl.registerLazySingleton(() => UpdateTodo(sl()));
   sl.registerLazySingleton(() => DeleteTodo(sl()));
   sl.registerLazySingleton(() => SearchTodos(sl()));
+
+  // Use cases - Auth
+  sl.registerLazySingleton(() => SignInAnonymously(sl()));
+  sl.registerLazySingleton(() => SignInWithEmailAndPassword(sl()));
+  sl.registerLazySingleton(() => CreateUserWithEmailAndPassword(sl()));
+  sl.registerLazySingleton(() => SignOut(sl()));
+  sl.registerLazySingleton(() => GetCurrentUser(sl()));
   sl.registerLazySingleton(() => RestoreTodo(sl()));
 
-  // Repository
+  // Repository - Todo
   sl.registerLazySingleton<TodoRepository>(
     () => TodoRepositoryImpl(
       localDataSource: sl(),
@@ -64,13 +89,27 @@ Future<void> init() async {
     ),
   );
 
-  // Data sources
+  // Repository - Auth
+  sl.registerLazySingleton<AuthRepository>(
+    () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
+  );
+
+  // Data sources - Todo
   sl.registerLazySingleton<TodoLocalDataSource>(
     () => TodoLocalDataSourceImpl(sharedPreferences: sl()),
   );
 
   sl.registerLazySingleton<TodoRemoteDataSource>(
     () => TodoRemoteDataSourceImpl(firestore: sl(), auth: sl()),
+  );
+
+  // Data sources - Auth
+  sl.registerLazySingleton<AuthLocalDataSource>(
+    () => AuthLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  sl.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(firebaseAuth: sl()),
   );
 
   // Auth
