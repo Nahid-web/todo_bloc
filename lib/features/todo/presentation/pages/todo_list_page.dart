@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../shared/widgets/loading_widget.dart';
+import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../../auth/presentation/bloc/auth_event.dart';
 import '../bloc/todo_list/todo_list_bloc.dart';
 import '../bloc/todo_list/todo_list_event.dart';
 import '../bloc/todo_list/todo_list_state.dart';
@@ -72,6 +74,23 @@ class _TodoListViewState extends State<TodoListView> {
                 }
               });
             },
+          ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'logout') {
+                context.read<AuthBloc>().add(SignOut());
+              }
+            },
+            itemBuilder:
+                (BuildContext context) => [
+                  const PopupMenuItem<String>(
+                    value: 'logout',
+                    child: ListTile(
+                      leading: Icon(Icons.logout),
+                      title: Text('Sign Out'),
+                    ),
+                  ),
+                ],
           ),
         ],
       ),

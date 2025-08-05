@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/todo.dart';
 
 class TodoModel extends Todo {
@@ -41,6 +43,28 @@ class TodoModel extends Todo {
       createdAt: todo.createdAt,
       updatedAt: todo.updatedAt,
     );
+  }
+
+  factory TodoModel.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return TodoModel(
+      id: doc.id,
+      title: data['title'] as String,
+      description: data['description'] as String,
+      isCompleted: data['isCompleted'] as bool,
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'title': title,
+      'description': description,
+      'isCompleted': isCompleted,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
+    };
   }
 
   @override
