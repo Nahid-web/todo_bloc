@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../auth/auth_service.dart';
+import '../network/network_info.dart';
 import '../../features/auth/data/datasources/auth_local_data_source.dart';
 import '../../features/auth/data/datasources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -25,6 +28,17 @@ import '../../features/todo/domain/usecases/restore_todo.dart';
 import '../../features/todo/domain/usecases/search_todos.dart';
 import '../../features/todo/domain/usecases/update_todo.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
+import '../../features/profile/data/datasources/profile_local_data_source.dart';
+import '../../features/profile/data/datasources/profile_remote_data_source.dart';
+import '../../features/profile/data/repositories/profile_repository_impl.dart';
+import '../../features/profile/domain/repositories/profile_repository.dart';
+import '../../features/profile/domain/usecases/delete_profile_picture.dart';
+import '../../features/profile/domain/usecases/get_user_profile.dart';
+import '../../features/profile/domain/usecases/update_password.dart';
+import '../../features/profile/domain/usecases/update_user_profile.dart';
+import '../../features/profile/domain/usecases/upload_profile_picture.dart';
+import '../../features/profile/presentation/bloc/profile_bloc.dart';
+import '../../features/settings/presentation/bloc/theme_bloc.dart';
 import '../../features/todo/presentation/bloc/todo_detail/todo_detail_bloc.dart';
 import '../../features/todo/presentation/bloc/todo_form/todo_form_bloc.dart';
 import '../../features/todo/presentation/bloc/todo_list/todo_list_bloc.dart';
@@ -64,6 +78,27 @@ Future<void> init() async {
     ),
   );
 
+  // Theme Bloc
+  sl.registerLazySingleton(() => ThemeBloc(sharedPreferences: sl()));
+
+  // Profile Bloc
+  sl.registerFactory(
+    () => ProfileBloc(
+      getUserProfile: sl(),
+      updateUserProfile: sl(),
+      uploadProfilePicture: sl(),
+      deleteProfilePicture: sl(),
+      updatePassword: sl(),
+    ),
+  );
+
+  // Use cases - Profile
+  sl.registerLazySingleton(() => GetUserProfile(sl()));
+  sl.registerLazySingleton(() => UpdateUserProfile(sl()));
+  sl.registerLazySingleton(() => UploadProfilePicture(sl()));
+  sl.registerLazySingleton(() => DeleteProfilePicture(sl()));
+  sl.registerLazySingleton(() => UpdatePassword(sl()));
+
   // Use cases - Todo
   sl.registerLazySingleton(() => GetTodos(sl()));
   sl.registerLazySingleton(() => GetTodoById(sl()));
@@ -94,6 +129,15 @@ Future<void> init() async {
     () => AuthRepositoryImpl(remoteDataSource: sl(), localDataSource: sl()),
   );
 
+  // Repository - Profile
+  sl.registerLazySingleton<ProfileRepository>(
+    () => ProfileRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
   // Data sources - Todo
   sl.registerLazySingleton<TodoLocalDataSource>(
     () => TodoLocalDataSourceImpl(sharedPreferences: sl()),
@@ -112,8 +156,24 @@ Future<void> init() async {
     () => AuthRemoteDataSourceImpl(firebaseAuth: sl()),
   );
 
+  // Data sources - Profile
+  sl.registerLazySingleton<ProfileLocalDataSource>(
+    () => ProfileLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
+  sl.registerLazySingleton<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(
+      firestore: sl(),
+      firebaseAuth: sl(),
+      firebaseStorage: sl(),
+    ),
+  );
+
   // Auth
   sl.registerLazySingleton<AuthService>(() => AuthServiceImpl(sl()));
+
+  // Network
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   //! Core
 
@@ -132,4 +192,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => firestore);
   sl.registerLazySingleton(() => FirebaseAuth.instance);
+  sl.registerLazySingleton(() => FirebaseStorage.instance);
+  sl.registerLazySingleton(() => InternetConnectionChecker());
 }

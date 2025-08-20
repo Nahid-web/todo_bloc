@@ -6,18 +6,22 @@ class AppLogger {
   static const String _appTag = '[TodoBLoC]';
 
   /// Log authentication operations
-  static void logAuth(String operation, {Map<String, dynamic>? data, String? error}) {
+  static void logAuth(
+    String operation, {
+    Map<String, dynamic>? data,
+    String? error,
+  }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final prefix = '$_appTag [AUTH] [$timestamp]';
-    
+
     if (error != null) {
       debugPrint('$prefix ❌ $operation FAILED: $error');
     } else {
       debugPrint('$prefix ✅ $operation SUCCESS');
     }
-    
+
     if (data != null) {
       debugPrint('$prefix 📊 Data: ${_formatData(data)}');
     }
@@ -25,28 +29,30 @@ class AppLogger {
   }
 
   /// Log Firestore operations
-  static void logFirestore(String operation, String collection, {
+  static void logFirestore(
+    String operation,
+    String collection, {
     String? documentId,
     Map<String, dynamic>? data,
     String? error,
     int? resultCount,
   }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final prefix = '$_appTag [FIRESTORE] [$timestamp]';
     final path = documentId != null ? '$collection/$documentId' : collection;
-    
+
     if (error != null) {
       debugPrint('$prefix ❌ $operation on $path FAILED: $error');
     } else {
       debugPrint('$prefix ✅ $operation on $path SUCCESS');
     }
-    
+
     if (resultCount != null) {
       debugPrint('$prefix 📊 Result count: $resultCount');
     }
-    
+
     if (data != null) {
       debugPrint('$prefix 📊 Data: ${_formatData(data)}');
     }
@@ -54,117 +60,132 @@ class AppLogger {
   }
 
   /// Log BLoC events and state changes
-  static void logBloc(String blocName, String event, {
+  static void logBloc(
+    String blocName,
+    String event, {
     String? previousState,
     String? newState,
     Map<String, dynamic>? eventData,
     String? error,
   }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final prefix = '$_appTag [BLOC] [$timestamp]';
-    
+
     debugPrint('$prefix 🎯 $blocName received event: $event');
-    
+
     if (eventData != null) {
       debugPrint('$prefix 📊 Event data: ${_formatData(eventData)}');
     }
-    
+
     if (previousState != null && newState != null) {
       debugPrint('$prefix 🔄 State transition: $previousState → $newState');
     }
-    
+
     if (error != null) {
       debugPrint('$prefix ❌ Error: $error');
     }
-    
+
     debugPrint('$prefix ─────────────────────────────────────');
   }
 
   /// Log network operations
-  static void logNetwork(String method, String url, {
+  static void logNetwork(
+    String operation, {
+    String? url,
     Map<String, dynamic>? requestData,
     Map<String, dynamic>? responseData,
     int? statusCode,
     String? error,
   }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final prefix = '$_appTag [NETWORK] [$timestamp]';
-    
+
     if (error != null) {
-      debugPrint('$prefix ❌ $method $url FAILED: $error');
+      debugPrint(
+        '$prefix ❌ $operation${url != null ? ' $url' : ''} FAILED: $error',
+      );
     } else {
-      debugPrint('$prefix ✅ $method $url SUCCESS (${statusCode ?? 'N/A'})');
+      debugPrint(
+        '$prefix ✅ $operation${url != null ? ' $url' : ''} SUCCESS (${statusCode ?? 'N/A'})',
+      );
     }
-    
+
     if (requestData != null) {
       debugPrint('$prefix 📤 Request: ${_formatData(requestData)}');
     }
-    
+
     if (responseData != null) {
       debugPrint('$prefix 📥 Response: ${_formatData(responseData)}');
     }
-    
+
     debugPrint('$prefix ─────────────────────────────────────');
   }
 
   /// Log general application events
-  static void logApp(String message, {
+  static void logApp(
+    String message, {
     String? category,
     Map<String, dynamic>? data,
+    String? error,
     LogLevel level = LogLevel.info,
   }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final categoryTag = category != null ? '[$category]' : '';
     final prefix = '$_appTag [APP] $categoryTag [$timestamp]';
     final emoji = _getEmojiForLevel(level);
-    
+
     debugPrint('$prefix $emoji $message');
-    
+
+    if (error != null) {
+      debugPrint('$prefix ❌ Error: $error');
+    }
+
     if (data != null) {
       debugPrint('$prefix 📊 Data: ${_formatData(data)}');
     }
-    
+
     debugPrint('$prefix ─────────────────────────────────────');
   }
 
   /// Log user actions
-  static void logUserAction(String action, {
+  static void logUserAction(
+    String action, {
     String? userId,
     Map<String, dynamic>? context,
   }) {
     if (!_isDebugMode) return;
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final prefix = '$_appTag [USER] [$timestamp]';
     final userInfo = userId != null ? ' (User: $userId)' : '';
-    
+
     debugPrint('$prefix 👤 $action$userInfo');
-    
+
     if (context != null) {
       debugPrint('$prefix 📊 Context: ${_formatData(context)}');
     }
-    
+
     debugPrint('$prefix ─────────────────────────────────────');
   }
 
   /// Format data for logging
   static String _formatData(Map<String, dynamic> data) {
     if (data.isEmpty) return '{}';
-    
+
     final buffer = StringBuffer();
     buffer.writeln('{');
-    
+
     data.forEach((key, value) {
       final formattedValue = _formatValue(value);
       buffer.writeln('  $key: $formattedValue');
     });
-    
+
     buffer.write('}');
     return buffer.toString();
   }
@@ -194,9 +215,4 @@ class AppLogger {
   }
 }
 
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-}
+enum LogLevel { debug, info, warning, error }

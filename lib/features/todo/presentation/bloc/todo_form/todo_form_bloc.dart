@@ -55,6 +55,10 @@ class TodoFormBloc extends Bloc<TodoFormEvent, TodoFormState> {
       isCompleted: false,
       createdAt: now,
       updatedAt: now,
+      dueDate: event.dueDate,
+      priority: event.priority,
+      category: event.category,
+      tags: event.tags,
     );
 
     final failureOrTodo = await addTodo(AddTodoParams(todo: todo));
@@ -70,9 +74,7 @@ class TodoFormBloc extends Bloc<TodoFormEvent, TodoFormState> {
   ) async {
     emit(TodoFormSubmitting());
 
-    final updatedTodo = event.todo.copyWith(
-      updatedAt: DateTime.now(),
-    );
+    final updatedTodo = event.todo.copyWith(updatedAt: DateTime.now());
 
     final failureOrTodo = await updateTodo(UpdateTodoParams(todo: updatedTodo));
     failureOrTodo.fold(
@@ -81,10 +83,7 @@ class TodoFormBloc extends Bloc<TodoFormEvent, TodoFormState> {
     );
   }
 
-  void _onResetForm(
-    ResetForm event,
-    Emitter<TodoFormState> emit,
-  ) {
+  void _onResetForm(ResetForm event, Emitter<TodoFormState> emit) {
     emit(TodoFormInitial());
   }
 }

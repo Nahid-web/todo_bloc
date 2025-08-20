@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../shared/widgets/loading_widget.dart';
-import '../../../todo/presentation/pages/todo_list_page.dart';
+import '../../../navigation/presentation/pages/main_navigation_page.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -23,7 +23,7 @@ class AppWrapper extends StatelessWidget {
           } else if (state is AuthAuthenticated) {
             return BlocProvider.value(
               value: context.read<AuthBloc>(),
-              child: const TodoListPage(),
+              child: const MainNavigationPage(),
             );
           } else {
             return const AuthPage();

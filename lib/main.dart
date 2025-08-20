@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_bloc/firebase_options.dart';
 
 import 'core/di/injection_container.dart' as di;
-
+import 'core/theme/app_theme.dart';
 import 'features/auth/presentation/pages/app_wrapper.dart';
+import 'features/settings/presentation/bloc/theme_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,14 +25,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo BLoC',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (_) => di.sl<ThemeBloc>(),
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Todo BLoC',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: state.themeMode,
+            home: const AppWrapper(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
-      home: const AppWrapper(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }

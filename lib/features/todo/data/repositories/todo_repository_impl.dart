@@ -84,7 +84,7 @@ class TodoRepositoryImpl implements TodoRepository {
           data: {'error': localError.toString()},
           level: LogLevel.error,
         );
-        return Left(CacheFailure());
+        return Left(CacheFailure('Failed to get todos from cache'));
       }
     }
   }
@@ -110,10 +110,10 @@ class TodoRepositoryImpl implements TodoRepository {
       if (localTodo != null) {
         return Right(localTodo);
       } else {
-        return Left(NotFoundFailure());
+        return Left(NotFoundFailure('Todo not found'));
       }
     } catch (e) {
-      return Left(CacheFailure());
+      return Left(CacheFailure('Failed to get todo from cache'));
     }
   }
 
@@ -141,7 +141,7 @@ class TodoRepositoryImpl implements TodoRepository {
         final result = await localDataSource.addTodo(todoModel);
         return Right(result);
       } catch (localError) {
-        return Left(CacheFailure());
+        return Left(CacheFailure('Failed to add todo to cache'));
       }
     }
   }
@@ -170,7 +170,7 @@ class TodoRepositoryImpl implements TodoRepository {
         final result = await localDataSource.updateTodo(todoModel);
         return Right(result);
       } catch (localError) {
-        return Left(CacheFailure());
+        return Left(CacheFailure('Failed to update todo in cache'));
       }
     }
   }
@@ -196,7 +196,7 @@ class TodoRepositoryImpl implements TodoRepository {
         await localDataSource.deleteTodo(id);
         return const Right(null);
       } catch (localError) {
-        return Left(CacheFailure());
+        return Left(CacheFailure('Failed to delete todo from cache'));
       }
     }
   }
@@ -218,7 +218,7 @@ class TodoRepositoryImpl implements TodoRepository {
         final localTodos = await localDataSource.searchTodos(query);
         return Right(localTodos);
       } catch (localError) {
-        return Left(CacheFailure());
+        return Left(CacheFailure('Failed to restore todo in cache'));
       }
     }
   }

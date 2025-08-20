@@ -1,276 +1,254 @@
-# Todo BLoC - Flutter Clean Architecture
+# 📱 Todo BLoC - Advanced Flutter Todo Application
 
-A comprehensive Flutter todo application built with BLoC pattern and Clean Architecture principles. This project demonstrates best practices for state management, dependency injection, and testing in Flutter applications.
+A comprehensive, production-ready Flutter todo application built with Clean Architecture, BLoC pattern, and Firebase integration. This project demonstrates modern Flutter development practices with robust state management, offline support, and comprehensive user management features.
 
-## 🏗️ Architecture
+## ✨ Features
 
-This project follows **Clean Architecture** principles with a feature-based folder structure:
+### 🎯 Core Todo Management
+- ✅ **Complete CRUD Operations** - Create, read, update, delete todos with soft delete support
+- 🏷️ **Enhanced Todo Properties** - Title, description, due dates, priority levels, categories, and tags
+- 📊 **Priority System** - Low, Medium, High, and Urgent priority levels with visual indicators
+- 🗂️ **Category Organization** - Personal, Work, Shopping, Health, Education, and Other categories
+- 🔍 **Advanced Search & Filtering** - Search by text, filter by category, priority, due date, and completion status
+- 📅 **Due Date Management** - Visual indicators for overdue and due-soon items
+- 🗑️ **Soft Delete & Restore** - Safely delete and restore todos with deletion tracking
+
+### 👤 User Management & Authentication
+- 🔐 **Firebase Authentication** - Email/password registration and login
+- 👻 **Guest Access** - Anonymous authentication for quick access
+- 👤 **User Profiles** - Complete profile management with display names, bio, and profile pictures
+- 🖼️ **Profile Pictures** - Upload, update, and delete profile pictures with Firebase Storage
+- 🔒 **Account Security** - Password updates, email verification, and account deletion
+- 💾 **Session Persistence** - Secure user session management
+
+### 🎨 User Experience
+- 🌙 **Dark/Light Theme** - Complete theme switching with system preference support
+- 📱 **Material Design 3** - Modern UI following Google's latest design guidelines
+- 🧭 **Bottom Navigation** - Intuitive navigation between Dashboard, Todos, and Settings
+- 📊 **Dashboard** - Statistics and quick actions (structure ready for implementation)
+- 🔄 **Offline Support** - Local caching with SharedPreferences for offline functionality
+- 📱 **Responsive Design** - Optimized for various screen sizes
+
+### 🏗️ Technical Architecture
+- 🧱 **Clean Architecture** - Strict separation of data, domain, and presentation layers
+- 🎯 **BLoC Pattern** - flutter_bloc for comprehensive state management
+- 🔥 **Firebase Integration** - Firestore, Authentication, and Storage
+- 💉 **Dependency Injection** - GetIt with proper DI container setup
+- ⚠️ **Error Handling** - Comprehensive Failure classes with Either pattern
+- 📝 **Comprehensive Logging** - Structured logging with categories and levels
+- 🌐 **Network Connectivity** - Internet connection checking and handling
+
+## 🏗️ Architecture Overview
+
+This application follows **Clean Architecture** principles with clear separation of concerns:
 
 ```
 lib/
-├── core/                    # Core functionality
-│   ├── di/                 # Dependency injection
-│   ├── error/              # Error handling
-│   ├── usecases/           # Base use case classes
-│   └── utils/              # Utility functions
-├── features/
-│   └── todo/               # Todo feature
-│       ├── data/           # Data layer
-│       │   ├── datasources/    # Local data sources
-│       │   ├── models/         # Data models
-│       │   └── repositories/   # Repository implementations
-│       ├── domain/         # Domain layer
-│       │   ├── entities/       # Business entities
-│       │   ├── repositories/   # Repository interfaces
-│       │   └── usecases/       # Business logic
-│       └── presentation/   # Presentation layer
-│           ├── bloc/           # BLoC state management
-│           ├── pages/          # UI screens
-│           └── widgets/        # Reusable widgets
-└── shared/                 # Shared components
-    ├── utils/              # Shared utilities
-    └── widgets/            # Shared widgets
+├── core/                    # Core functionality and shared utilities
+│   ├── auth/               # Authentication service
+│   ├── constants/          # App constants and configurations
+│   ├── di/                 # Dependency injection container
+│   ├── error/              # Error handling (Failures, Exceptions)
+│   ├── logging/            # Centralized logging system
+│   ├── network/            # Network connectivity checking
+│   ├── theme/              # App theming and Material Design 3
+│   └── usecases/           # Base use case classes
+├── features/               # Feature-based organization
+│   ├── auth/               # Authentication feature
+│   │   ├── data/           # Data sources, repositories, models
+│   │   ├── domain/         # Entities, repositories, use cases
+│   │   └── presentation/   # BLoC, pages, widgets
+│   ├── profile/            # User profile management
+│   ├── todo/               # Todo management
+│   ├── settings/           # App settings
+│   ├── dashboard/          # Dashboard and statistics
+│   └── navigation/         # Bottom navigation
+└── shared/                 # Shared widgets and utilities
 ```
 
-## 🚀 Features
+### 🎯 BLoC Pattern Implementation
+- **AuthBloc** - Authentication state management
+- **ProfileBloc** - User profile operations
+- **TodoListBloc** - Todo list management
+- **TodoDetailBloc** - Individual todo operations
+- **TodoFormBloc** - Todo creation and editing
+- **ThemeBloc** - Theme switching and persistence
 
-### Core Functionality
+### 🔥 Firebase Integration
+- **Firestore** - Real-time database for todos and user profiles
+- **Authentication** - User registration, login, and session management
+- **Storage** - Profile picture uploads and management
 
-- ✅ **Create** new todos with title and description
-- ✅ **Read** and display todos in a list
-- ✅ **Update** todo details and completion status
-- ✅ **Delete** todos with confirmation dialog
-- ✅ **Search** todos by title and description
-- ✅ **Toggle** completion status
-- ✅ **Undo** delete operations
-- ✅ **Cloud sync** with Firebase Firestore
-- ✅ **User authentication** with Firebase Auth
-- ✅ **Offline-first** approach with local caching
+## 🚀 Getting Started
 
-### UI/UX Features
+### Prerequisites
+- Flutter SDK (3.0.0 or higher)
+- Dart SDK (3.0.0 or higher)
+- Firebase project with Firestore, Authentication, and Storage enabled
+- Android Studio / VS Code with Flutter extensions
 
-- 🎨 **Material Design 3** components
-- 📱 **Responsive design** for different screen sizes
-- 🔍 **Search functionality** with real-time filtering
-- ⚡ **Loading states** and error handling
-- 🔄 **Pull-to-refresh** support
-- 📝 **Form validation** with user feedback
-- 🗑️ **Confirmation dialogs** for destructive actions
-
-### Technical Features
-
-- 🏛️ **Clean Architecture** implementation
-- 🔄 **BLoC pattern** for state management
-- 💉 **Dependency injection** with GetIt
-- 💾 **Local storage** with SharedPreferences
-- ☁️ **Cloud storage** with Firebase Firestore
-- 🔐 **User authentication** with Firebase Auth
-- 📱 **Offline-first** architecture with sync
-- 🧪 **Unit and widget tests**
-- 📊 **Error handling** with Either pattern
-- 🔧 **Form validation** with flutter_form_builder
-
-## 📦 Dependencies
-
-### Core Dependencies
-
-- `flutter_bloc` - State management
-- `get_it` - Dependency injection
-- `shared_preferences` - Local storage
-- `equatable` - Value equality
-- `dartz` - Functional programming (Either pattern)
-- `uuid` - Unique ID generation
-
-### Firebase Dependencies
-
-- `firebase_core` - Firebase SDK initialization
-- `cloud_firestore` - Cloud database
-- `firebase_auth` - User authentication
-
-### UI Dependencies
-
-- `flutter_form_builder` - Form building and validation
-- `form_builder_validators` - Form validation rules
-- `intl` - Internationalization and date formatting
-
-### Development Dependencies
-
-- `bloc_test` - BLoC testing utilities
-- `mocktail` - Mocking for tests
-- `flutter_test` - Testing framework
-
-## 🛠️ Setup and Installation
+### Installation
 
 1. **Clone the repository**
-
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/yourusername/todo_bloc.git
    cd todo_bloc
    ```
 
 2. **Install dependencies**
-
    ```bash
    flutter pub get
    ```
 
-3. **Run the application**
+3. **Firebase Setup**
+   - Create a new Firebase project at [Firebase Console](https://console.firebase.google.com/)
+   - Enable Firestore Database, Authentication (Email/Password and Anonymous), and Storage
+   - Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS)
+   - Place them in the appropriate directories:
+     - Android: `android/app/google-services.json`
+     - iOS: `ios/Runner/GoogleService-Info.plist`
 
+4. **Configure Firebase**
+   ```bash
+   flutter packages pub run build_runner build
+   ```
+
+5. **Run the application**
    ```bash
    flutter run
    ```
 
-4. **Run tests**
-   ```bash
-   flutter test
-   ```
+## 📱 Usage Guide
 
-## 🧪 Testing
+### 🔐 Authentication
+1. **Sign Up** - Create a new account with email and password
+2. **Sign In** - Login with existing credentials
+3. **Guest Access** - Use anonymous authentication for quick access
+4. **Profile Setup** - Complete your profile with display name, bio, and profile picture
 
-The project includes comprehensive tests:
+### 📝 Todo Management
+1. **Create Todos** - Add new todos with title, description, due date, priority, and category
+2. **Organize** - Use categories and tags to organize your todos
+3. **Prioritize** - Set priority levels with visual indicators
+4. **Search & Filter** - Find todos quickly with advanced search and filtering
+5. **Track Progress** - Monitor overdue and due-soon items
 
-- **Unit Tests**: Domain entities, use cases, and data models
-- **Widget Tests**: UI components and user interactions
-- **BLoC Tests**: State management logic
+### ⚙️ Settings & Customization
+1. **Theme** - Switch between light and dark themes
+2. **Profile** - Update your profile information and picture
+3. **Account** - Manage account settings and security
 
-Run tests with:
+## 🛠️ Technologies Used
 
-```bash
-flutter test
-```
+### Frontend
+- **Flutter** - Cross-platform mobile development framework
+- **Dart** - Programming language
+- **Material Design 3** - Google's latest design system
 
-## 📱 Screens
+### State Management
+- **flutter_bloc** - Business Logic Component pattern
+- **equatable** - Value equality for Dart classes
 
-### 1. Todo List Screen
+### Backend & Database
+- **Firebase Firestore** - NoSQL cloud database
+- **Firebase Authentication** - User authentication service
+- **Firebase Storage** - File storage service
 
-- Displays all todos in a scrollable list
-- Search functionality in the app bar
-- Pull-to-refresh support
-- Floating action button to add new todos
-- Delete confirmation with undo functionality
+### Architecture & Patterns
+- **Clean Architecture** - Separation of concerns
+- **Repository Pattern** - Data access abstraction
+- **Either Pattern** - Functional error handling
+- **Dependency Injection** - GetIt for DI container
 
-### 2. Add/Edit Todo Screen
+### Additional Packages
+- **dartz** - Functional programming utilities
+- **shared_preferences** - Local data persistence
+- **image_picker** - Image selection from gallery/camera
+- **intl** - Internationalization and date formatting
+- **flutter_form_builder** - Advanced form building
+- **internet_connection_checker** - Network connectivity checking
 
-- Form with title and description fields
-- Real-time validation
-- Save/Update functionality
-- Material Design 3 components
+## 📊 Project Structure
 
-### 3. Todo Detail Screen
+### Data Layer
+- **Models** - Data transfer objects with JSON serialization
+- **Data Sources** - Local (SharedPreferences) and Remote (Firebase) data sources
+- **Repositories** - Implementation of domain repository contracts
 
-- Detailed view of individual todo
-- Toggle completion status
-- Edit and delete options
-- Formatted creation and update dates
+### Domain Layer
+- **Entities** - Core business objects
+- **Repositories** - Abstract repository contracts
+- **Use Cases** - Business logic operations
 
-## 🔧 State Management
+### Presentation Layer
+- **BLoC** - State management and business logic
+- **Pages** - Screen implementations
+- **Widgets** - Reusable UI components
 
-The app uses **BLoC pattern** with three main BLoCs:
+## 🐛 Known Issues & Limitations
 
-### TodoListBloc
+### Current Issues
+- Some deprecated Flutter APIs need updating (withOpacity → withValues)
+- Email verification feature is not fully implemented
+- Dashboard statistics need implementation
+- Some logging calls need signature updates
 
-- Manages the list of todos
-- Handles search functionality
-- Manages delete and restore operations
-- Handles completion status toggling
+### Planned Improvements
+- Push notifications for due dates
+- Data export/import functionality
+- Advanced todo templates
+- Collaboration features
+- Widget for home screen
 
-### TodoFormBloc
+## 🗺️ Future Roadmap
 
-- Manages add/edit todo forms
-- Handles form validation
-- Manages form submission
+### Phase 1 - Core Improvements
+- [ ] Complete dashboard implementation with statistics
+- [ ] Implement push notifications
+- [ ] Add data export/import features
+- [ ] Complete email verification system
 
-### TodoDetailBloc
+### Phase 2 - Advanced Features
+- [ ] Todo templates and recurring tasks
+- [ ] Collaboration and sharing
+- [ ] Advanced analytics and insights
+- [ ] Widget for home screen
 
-- Manages individual todo details
-- Handles todo updates and deletion
-- Manages loading states
-
-## 💾 Data Persistence & Cloud Sync
-
-The app uses a **hybrid approach** combining local and cloud storage:
-
-### Local Storage (SharedPreferences)
-
-- Todos are cached locally as JSON strings
-- Automatic serialization/deserialization
-- Offline-first approach for instant access
-
-### Cloud Storage (Firebase Firestore)
-
-- User-specific todo collections
-- Real-time synchronization across devices
-- Automatic conflict resolution
-- Secure user authentication with Firebase Auth
-
-### Sync Strategy
-
-- **Write**: Save to cloud first, then cache locally
-- **Read**: Try cloud first, fallback to local cache
-- **Offline**: Full functionality with local storage
-- **Online**: Automatic sync when connection restored
-
-## 🎯 Key Design Patterns
-
-1. **Repository Pattern**: Abstracts data sources
-2. **Use Case Pattern**: Encapsulates business logic
-3. **BLoC Pattern**: Manages application state
-4. **Dependency Injection**: Manages object dependencies
-5. **Either Pattern**: Handles success/failure scenarios
-
-## 🚀 Getting Started
-
-1. Launch the app
-2. **Sign in** as a guest to get started (Firebase Auth)
-3. Tap the **+** button to create your first todo
-4. Fill in the title (required) and description (optional)
-5. Tap **Save** to add the todo (syncs to cloud)
-6. Use the search icon to filter todos
-7. Tap on any todo to view details
-8. Use the checkbox to mark todos as complete
-9. Swipe or use the delete button to remove todos
-10. Use **Undo** to restore accidentally deleted todos
-11. Use the **menu** to sign out when needed
-
-### Firebase Setup
-
-The app is configured to work with Firebase Console. For full setup:
-
-1. **Quick Start**: The app works out of the box with the included Firebase project
-2. **Custom Setup**: See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for detailed instructions
-3. **Requirements**:
-   - Firebase project with Firestore Database enabled
-   - Anonymous authentication enabled
-   - Proper security rules configured
-
-**Current Configuration**:
-
-- Project ID: `todo-bloc-1cc94`
-- Authentication: Anonymous (guest mode)
-- Database: Cloud Firestore with offline persistence
-- Platforms: Android, iOS, Web, Windows, macOS
+### Phase 3 - Platform Expansion
+- [ ] Web support optimization
+- [ ] Desktop support (Windows, macOS, Linux)
+- [ ] API for third-party integrations
 
 ## 🤝 Contributing
 
+We welcome contributions! Please follow these steps:
+
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Ensure all tests pass
-6. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+- Follow Clean Architecture principles
+- Write comprehensive tests for new features
+- Update documentation for significant changes
+- Follow Flutter and Dart style guidelines
+- Ensure all tests pass before submitting PR
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-A few resources to get you started if this is your first Flutter project:
+## 🙏 Acknowledgments
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter team for the amazing framework
+- Firebase team for the backend services
+- Material Design team for the design system
+- Open source community for the excellent packages
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-#   t o d o _ b l o c 
- 
- 
+---
+
+**Built with ❤️ using Flutter and Firebase**
+
+For questions, issues, or contributions, please visit our [GitHub repository](https://github.com/yourusername/todo_bloc).

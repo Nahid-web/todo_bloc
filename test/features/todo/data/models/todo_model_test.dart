@@ -51,6 +51,13 @@ void main() {
           'isCompleted': false,
           'createdAt': '2023-01-01T00:00:00.000',
           'updatedAt': '2023-01-01T00:00:00.000',
+          'dueDate': null,
+          'priority': 'medium',
+          'category': 'personal',
+          'tags': <String>[],
+          'userId': null,
+          'isDeleted': false,
+          'deletedAt': null,
         };
         expect(result, expectedMap);
       });

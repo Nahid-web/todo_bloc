@@ -6,7 +6,7 @@ abstract class TodoFormEvent extends Equatable {
   const TodoFormEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadTodoForEdit extends TodoFormEvent {
@@ -15,20 +15,35 @@ class LoadTodoForEdit extends TodoFormEvent {
   const LoadTodoForEdit(this.id);
 
   @override
-  List<Object> get props => [id];
+  List<Object?> get props => [id];
 }
 
 class SubmitTodo extends TodoFormEvent {
   final String title;
   final String description;
+  final DateTime? dueDate;
+  final TodoPriority priority;
+  final TodoCategory category;
+  final List<String> tags;
 
   const SubmitTodo({
     required this.title,
     required this.description,
+    this.dueDate,
+    this.priority = TodoPriority.medium,
+    this.category = TodoCategory.personal,
+    this.tags = const [],
   });
 
   @override
-  List<Object> get props => [title, description];
+  List<Object?> get props => [
+    title,
+    description,
+    dueDate,
+    priority,
+    category,
+    tags,
+  ];
 }
 
 class UpdateExistingTodo extends TodoFormEvent {
@@ -37,7 +52,7 @@ class UpdateExistingTodo extends TodoFormEvent {
   const UpdateExistingTodo(this.todo);
 
   @override
-  List<Object> get props => [todo];
+  List<Object?> get props => [todo];
 }
 
 class ResetForm extends TodoFormEvent {}
