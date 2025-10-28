@@ -56,9 +56,9 @@ void main() {
     testWidgets('should call onToggle when checkbox is tapped', (tester) async {
       // arrange
       bool toggleCalled = false;
-      await tester.pumpWidget(createWidgetUnderTest(
-        onToggle: () => toggleCalled = true,
-      ));
+      await tester.pumpWidget(
+        createWidgetUnderTest(onToggle: () => toggleCalled = true),
+      );
 
       // act
       await tester.tap(find.byType(Checkbox));
@@ -70,9 +70,9 @@ void main() {
     testWidgets('should call onTap when list tile is tapped', (tester) async {
       // arrange
       bool tapCalled = false;
-      await tester.pumpWidget(createWidgetUnderTest(
-        onTap: () => tapCalled = true,
-      ));
+      await tester.pumpWidget(
+        createWidgetUnderTest(onTap: () => tapCalled = true),
+      );
 
       // act
       await tester.tap(find.byType(ListTile));
@@ -81,17 +81,19 @@ void main() {
       expect(tapCalled, true);
     });
 
-    testWidgets('should show delete button when onDelete is provided', (tester) async {
+    testWidgets('should show delete button when onDelete is provided', (
+      tester,
+    ) async {
       // arrange & act
-      await tester.pumpWidget(createWidgetUnderTest(
-        onDelete: () {},
-      ));
+      await tester.pumpWidget(createWidgetUnderTest(onDelete: () {}));
 
       // assert
       expect(find.byIcon(Icons.delete_outline), findsOneWidget);
     });
 
-    testWidgets('should not show delete button when onDelete is null', (tester) async {
+    testWidgets('should not show delete button when onDelete is null', (
+      tester,
+    ) async {
       // arrange & act
       await tester.pumpWidget(createWidgetUnderTest());
 
@@ -99,12 +101,14 @@ void main() {
       expect(find.byIcon(Icons.delete_outline), findsNothing);
     });
 
-    testWidgets('should call onDelete when delete button is tapped', (tester) async {
+    testWidgets('should call onDelete when delete button is tapped', (
+      tester,
+    ) async {
       // arrange
       bool deleteCalled = false;
-      await tester.pumpWidget(createWidgetUnderTest(
-        onDelete: () => deleteCalled = true,
-      ));
+      await tester.pumpWidget(
+        createWidgetUnderTest(onDelete: () => deleteCalled = true),
+      );
 
       // act
       await tester.tap(find.byIcon(Icons.delete_outline));
