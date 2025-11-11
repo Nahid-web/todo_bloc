@@ -58,7 +58,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           isEmailVerified: user.emailVerified,
         );
 
-        await firestore.collection('users').doc(userId).set(defaultProfile.toFirestore());
+        await firestore
+            .collection('users')
+            .doc(userId)
+            .set(defaultProfile.toFirestore());
 
         AppLogger.logNetwork(
           'POST Firestore - Create Default User Profile',
@@ -113,7 +116,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       );
 
       final updatedProfile = profile.copyWith(updatedAt: DateTime.now());
-      
+
       await firestore
           .collection('users')
           .doc(profile.id)
@@ -167,10 +170,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         'POST Firebase Storage - Upload Profile Picture',
         url: 'profile_pictures/$userId',
         statusCode: 200,
-        responseData: {
-          'userId': userId,
-          'downloadUrl': downloadUrl,
-        },
+        responseData: {'userId': userId, 'downloadUrl': downloadUrl},
       );
 
       return downloadUrl;
@@ -180,7 +180,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         url: 'profile_pictures/$userId',
         error: e.toString(),
       );
-      throw ServerException('Failed to upload profile picture: ${e.toString()}');
+      throw ServerException(
+        'Failed to upload profile picture: ${e.toString()}',
+      );
     }
   }
 
@@ -212,7 +214,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         url: 'profile_pictures/$userId',
         error: e.toString(),
       );
-      throw ServerException('Failed to delete profile picture: ${e.toString()}');
+      throw ServerException(
+        'Failed to delete profile picture: ${e.toString()}',
+      );
     }
   }
 
@@ -231,7 +235,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
       // Delete user data from Firestore
       await firestore.collection('users').doc(userId).delete();
-      
+
       // Delete profile picture if exists
       try {
         await deleteProfilePicture(userId);
@@ -258,7 +262,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<void> updatePassword(String currentPassword, String newPassword) async {
+  Future<void> updatePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
     try {
       AppLogger.logNetwork(
         'PUT Firebase Auth - Update Password',
@@ -317,7 +324,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         url: 'auth/password-reset',
         error: e.toString(),
       );
-      throw ServerException('Failed to send password reset email: ${e.toString()}');
+      throw ServerException(
+        'Failed to send password reset email: ${e.toString()}',
+      );
     }
   }
 
@@ -347,7 +356,9 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         url: 'auth/email-verification',
         error: e.toString(),
       );
-      throw ServerException('Failed to send email verification: ${e.toString()}');
+      throw ServerException(
+        'Failed to send email verification: ${e.toString()}',
+      );
     }
   }
 
@@ -373,7 +384,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       await user.reauthenticateWithCredential(credential);
 
       // Update email
-      await user.updateEmail(newEmail);
+      await user.verifyBeforeUpdateEmail(newEmail);
 
       // Update email in Firestore profile
       await firestore.collection('users').doc(user.uid).update({

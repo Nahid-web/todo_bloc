@@ -165,7 +165,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                     keyboardType: TextInputType.phone,
                     validator: FormBuilderValidators.compose([
                       FormBuilderValidators.match(
-                        r'^[\+]?[1-9][\d]{0,15}$',
+                        r'^[\+]?[1-9][\d]{0,15}$' as RegExp,
                         errorText: 'Please enter a valid phone number',
                       ),
                     ]),
