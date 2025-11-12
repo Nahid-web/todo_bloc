@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -96,7 +97,7 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                 ),
               ),
             );
-            Navigator.of(context).pop(true);
+            context.pop(true);
           } else if (state is TodoFormError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(

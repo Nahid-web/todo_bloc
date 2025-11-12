@@ -3,23 +3,18 @@ import 'package:flutter/material.dart';
 import '../../../dashboard/presentation/pages/dashboard_page.dart';
 import '../../../settings/presentation/pages/settings_page.dart';
 import '../../../todo/presentation/pages/todo_list_page.dart';
+import 'package:go_router/go_router.dart';
 
 class MainNavigationPage extends StatefulWidget {
-  const MainNavigationPage({super.key});
+  final Widget child;
+
+  const MainNavigationPage({super.key, required this.child});
 
   @override
   State<MainNavigationPage> createState() => _MainNavigationPageState();
 }
 
 class _MainNavigationPageState extends State<MainNavigationPage> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    const DashboardPage(),
-    const TodoListPage(),
-    const SettingsPage(),
-  ];
-
   final List<NavigationDestination> _destinations = [
     const NavigationDestination(
       icon: Icon(Icons.dashboard_outlined),
@@ -40,20 +35,37 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = _getCurrentIndex(context);
+
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: widget.child,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        selectedIndex: currentIndex,
+        onDestinationSelected: (index) => _onItemSelected(context, index),
         destinations: _destinations,
       ),
     );
+  }
+
+  int _getCurrentIndex(BuildContext context) {
+    final location = GoRouterState.of(context).matchedLocation;
+
+    if (location.startsWith('/todos')) return 1;
+    if (location.startsWith('/settings')) return 2;
+    return 0;
+  }
+
+  void _onItemSelected(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/');
+        break;
+      case 1:
+        context.go('/todos');
+        break;
+      case 2:
+        context.go('/settings');
+        break;
+    }
   }
 }

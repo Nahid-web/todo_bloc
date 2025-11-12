@@ -1,27 +1,36 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_bloc/firebase_options.dart';
 
 import 'core/di/injection_container.dart' as di;
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
-import 'features/auth/presentation/pages/app_wrapper.dart';
 import 'features/settings/presentation/bloc/theme_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase (using emulator for development)
+  // Initialize Firebase
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize dependency injection
   await di.init();
 
-  runApp(const MyApp());
+  final authNotifier = ValueNotifier<User?>(null);
+  FirebaseAuth.instance.authStateChanges().listen((user) {
+    authNotifier.value = user;
+  });
+
+  runApp(MyApp(authNotifier: authNotifier));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ValueNotifier<User?> authNotifier;
+
+  const MyApp({super.key, required this.authNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +38,13 @@ class MyApp extends StatelessWidget {
       create: (_) => di.sl<ThemeBloc>(),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
-          return MaterialApp(
+          return MaterialApp.router(
             title: 'Todo BLoC',
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
-            home: const AppWrapper(),
             debugShowCheckedModeBanner: false,
+            routerConfig: createAppRouter(authNotifier),
           );
         },
       ),

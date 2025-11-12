@@ -11,6 +11,7 @@ import '../bloc/todo_list/todo_list_state.dart';
 import '../widgets/todo_item.dart';
 import 'add_edit_todo_page.dart';
 import 'todo_detail_page.dart';
+import 'package:go_router/go_router.dart';
 
 class TodoListPage extends StatelessWidget {
   const TodoListPage({super.key});
@@ -148,11 +149,7 @@ class _TodoListViewState extends State<TodoListView> {
                   return TodoItem(
                     todo: todo,
                     onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => TodoDetailPage(todoId: todo.id),
-                        ),
-                      );
+                      context.push('/todos/detail/${todo.id}');
                     },
                     onToggle: () {
                       context.read<TodoListBloc>().add(
@@ -175,9 +172,7 @@ class _TodoListViewState extends State<TodoListView> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const AddEditTodoPage()));
+          final result = await context.push('/todos/add');
           if (result == true && context.mounted) {
             context.read<TodoListBloc>().add(RefreshTodos());
           }

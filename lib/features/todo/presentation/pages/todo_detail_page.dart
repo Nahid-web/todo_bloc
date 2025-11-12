@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../shared/widgets/loading_widget.dart';
@@ -84,7 +85,7 @@ class TodoDetailView extends StatelessWidget {
                 content: Text('Todo "${state.deletedTodo.title}" deleted'),
               ),
             );
-            Navigator.of(context).pop(true);
+            context.pop(true);
           } else if (state is TodoDetailError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -247,9 +248,7 @@ class TodoDetailView extends StatelessWidget {
   }
 
   void _navigateToEdit(BuildContext context, String todoId) async {
-    final result = await Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => AddEditTodoPage(todoId: todoId)));
+    final result = await context.push('/todos/edit/$todoId');
     if (result == true && context.mounted) {
       context.read<TodoDetailBloc>().add(LoadTodoDetail(todoId));
     }
