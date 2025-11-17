@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../../domain/entities/user_profile.dart';
 import '../bloc/profile_bloc.dart';
 import '../bloc/profile_event.dart';
@@ -74,10 +74,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                 child: Text(
                   'Save',
                   style: TextStyle(
-                    color:
-                        state is ProfileUpdating
-                            ? theme.disabledColor
-                            : theme.colorScheme.primary,
+                    color: state is ProfileUpdating
+                        ? theme.disabledColor
+                        : theme.colorScheme.primary,
                   ),
                 ),
               );
@@ -206,10 +205,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     ? Icons.verified
                                     : Icons.warning_outlined,
                                 size: 16,
-                                color:
-                                    widget.profile.isEmailVerified
-                                        ? Colors.green
-                                        : Colors.orange,
+                                color: widget.profile.isEmailVerified
+                                    ? Colors.green
+                                    : Colors.orange,
                               ),
                               const SizedBox(width: 4),
                               Text(
@@ -217,10 +215,9 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     ? 'Verified'
                                     : 'Not verified',
                                 style: TextStyle(
-                                  color:
-                                      widget.profile.isEmailVerified
-                                          ? Colors.green
-                                          : Colors.orange,
+                                  color: widget.profile.isEmailVerified
+                                      ? Colors.green
+                                      : Colors.orange,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -288,24 +285,21 @@ class _EditProfileViewState extends State<EditProfileView> {
   void _saveProfile() {
     if (_formKey.currentState?.saveAndValidate() ?? false) {
       final updatedProfile = widget.profile.copyWith(
-        displayName:
-            _displayNameController.text.trim().isEmpty
-                ? null
-                : _displayNameController.text.trim(),
-        bio:
-            _bioController.text.trim().isEmpty
-                ? null
-                : _bioController.text.trim(),
-        phoneNumber:
-            _phoneController.text.trim().isEmpty
-                ? null
-                : _phoneController.text.trim(),
+        displayName: _displayNameController.text.trim().isEmpty
+            ? null
+            : _displayNameController.text.trim(),
+        bio: _bioController.text.trim().isEmpty
+            ? null
+            : _bioController.text.trim(),
+        phoneNumber: _phoneController.text.trim().isEmpty
+            ? null
+            : _phoneController.text.trim(),
         updatedAt: DateTime.now(),
       );
 
       context.read<ProfileBloc>().add(
-        UpdateUserProfile(profile: updatedProfile),
-      );
+            UpdateUserProfile(profile: updatedProfile),
+          );
     }
   }
 

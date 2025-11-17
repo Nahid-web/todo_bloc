@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection_container.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../../domain/entities/todo.dart';
 import '../bloc/todo_form/todo_form_bloc.dart';
 import '../bloc/todo_form/todo_form_event.dart';
@@ -74,10 +74,9 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                 child: Text(
                   widget.isEditing ? 'Update' : 'Save',
                   style: TextStyle(
-                    color:
-                        state is TodoFormSubmitting
-                            ? Theme.of(context).disabledColor
-                            : Theme.of(context).colorScheme.primary,
+                    color: state is TodoFormSubmitting
+                        ? Theme.of(context).disabledColor
+                        : Theme.of(context).colorScheme.primary,
                   ),
                 ),
               );
@@ -178,15 +177,16 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                           child: Text(
                             _selectedDueDate != null
                                 ? DateFormat(
-                                  'MMM dd, yyyy',
-                                ).format(_selectedDueDate!)
+                                    'MMM dd, yyyy',
+                                  ).format(_selectedDueDate!)
                                 : 'Select due date',
                             style: TextStyle(
-                              color:
-                                  _selectedDueDate != null
-                                      ? Theme.of(context).colorScheme.onSurface
-                                      : Theme.of(context).colorScheme.onSurface
-                                          .withValues(alpha: 0.6),
+                              color: _selectedDueDate != null
+                                  ? Theme.of(context).colorScheme.onSurface
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.6),
                             ),
                           ),
                         ),
@@ -203,32 +203,31 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
-                    children:
-                        TodoPriority.values.map((priority) {
-                          final isSelected = _selectedPriority == priority;
-                          final color = AppTheme.getPriorityColor(
-                            priority.name,
-                          );
+                    children: TodoPriority.values.map((priority) {
+                      final isSelected = _selectedPriority == priority;
+                      final color = AppTheme.getPriorityColor(
+                        priority.name,
+                      );
 
-                          return FilterChip(
-                            label: Text(
-                              priority.name.toUpperCase(),
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : color,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            selected: isSelected,
-                            onSelected: (selected) {
-                              setState(() {
-                                _selectedPriority = priority;
-                              });
-                            },
-                            backgroundColor: color.withValues(alpha: 0.1),
-                            selectedColor: color,
-                            checkmarkColor: Colors.white,
-                          );
-                        }).toList(),
+                      return FilterChip(
+                        label: Text(
+                          priority.name.toUpperCase(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : color,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedPriority = priority;
+                          });
+                        },
+                        backgroundColor: color.withValues(alpha: 0.1),
+                        selectedColor: color,
+                        checkmarkColor: Colors.white,
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 16),
 
@@ -241,32 +240,31 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children:
-                        TodoCategory.values.map((category) {
-                          final isSelected = _selectedCategory == category;
-                          final color = AppTheme.getCategoryColor(
-                            category.name,
-                          );
+                    children: TodoCategory.values.map((category) {
+                      final isSelected = _selectedCategory == category;
+                      final color = AppTheme.getCategoryColor(
+                        category.name,
+                      );
 
-                          return FilterChip(
-                            label: Text(
-                              category.name.toUpperCase(),
-                              style: TextStyle(
-                                color: isSelected ? Colors.white : color,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            selected: isSelected,
-                            onSelected: (selected) {
-                              setState(() {
-                                _selectedCategory = category;
-                              });
-                            },
-                            backgroundColor: color.withValues(alpha: 0.1),
-                            selectedColor: color,
-                            checkmarkColor: Colors.white,
-                          );
-                        }).toList(),
+                      return FilterChip(
+                        label: Text(
+                          category.name.toUpperCase(),
+                          style: TextStyle(
+                            color: isSelected ? Colors.white : color,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedCategory = category;
+                          });
+                        },
+                        backgroundColor: color.withValues(alpha: 0.1),
+                        selectedColor: color,
+                        checkmarkColor: Colors.white,
+                      );
+                    }).toList(),
                   ),
                   const SizedBox(height: 16),
 
@@ -282,12 +280,11 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
                     ),
                     onChanged: (value) {
                       if (value != null) {
-                        _tags =
-                            value
-                                .split(',')
-                                .map((tag) => tag.trim())
-                                .where((tag) => tag.isNotEmpty)
-                                .toList();
+                        _tags = value
+                            .split(',')
+                            .map((tag) => tag.trim())
+                            .where((tag) => tag.isNotEmpty)
+                            .toList();
                       }
                     },
                   ),
@@ -357,15 +354,15 @@ class _AddEditTodoViewState extends State<AddEditTodoView> {
         context.read<TodoFormBloc>().add(UpdateExistingTodo(updatedTodo));
       } else {
         context.read<TodoFormBloc>().add(
-          SubmitTodo(
-            title: title,
-            description: description,
-            dueDate: _selectedDueDate,
-            priority: _selectedPriority,
-            category: _selectedCategory,
-            tags: _tags,
-          ),
-        );
+              SubmitTodo(
+                title: title,
+                description: description,
+                dueDate: _selectedDueDate,
+                priority: _selectedPriority,
+                category: _selectedCategory,
+                tags: _tags,
+              ),
+            );
       }
     }
   }

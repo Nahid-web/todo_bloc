@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_state.dart';
 import '../bloc/profile_bloc.dart';
@@ -46,8 +46,8 @@ class _ProfileViewState extends State<ProfileView> {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
       context.read<ProfileBloc>().add(
-        LoadUserProfile(userId: authState.user.id),
-      );
+            LoadUserProfile(userId: authState.user.id),
+          );
     }
   }
 
@@ -190,7 +190,9 @@ class _ProfileViewState extends State<ProfileView> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: IconButton(
-                                      onPressed: isUploading ? null : _showProfilePictureOptions,
+                                      onPressed: isUploading
+                                          ? null
+                                          : _showProfilePictureOptions,
                                       icon: const Icon(
                                         Icons.camera_alt,
                                         color: Colors.white,
@@ -213,10 +215,12 @@ class _ProfileViewState extends State<ProfileView> {
                             Text(
                               profile.email,
                               style: theme.textTheme.bodyLarge?.copyWith(
-                                color: theme.colorScheme.onSurface.withOpacity(0.7),
+                                color: theme.colorScheme.onSurface
+                                    .withOpacity(0.7),
                               ),
                             ),
-                            if (profile.bio != null && profile.bio!.isNotEmpty) ...[
+                            if (profile.bio != null &&
+                                profile.bio!.isNotEmpty) ...[
                               const SizedBox(height: 8),
                               Text(
                                 profile.bio!,
@@ -272,7 +276,8 @@ class _ProfileViewState extends State<ProfileView> {
                             leading: const Icon(Icons.person_outline),
                             title: const Text('Display Name'),
                             subtitle: Text(profile.displayName ?? 'Not set'),
-                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios, size: 16),
                             onTap: () => _navigateToEditProfile(profile),
                           ),
                           const Divider(height: 1),
@@ -284,7 +289,8 @@ class _ProfileViewState extends State<ProfileView> {
                                   ? profile.bio!
                                   : 'Not set',
                             ),
-                            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                            trailing:
+                                const Icon(Icons.arrow_forward_ios, size: 16),
                             onTap: () => _navigateToEditProfile(profile),
                           ),
                           const Divider(height: 1),
@@ -321,7 +327,8 @@ class _ProfileViewState extends State<ProfileView> {
                               leading: const Icon(Icons.phone_outlined),
                               title: const Text('Phone Number'),
                               subtitle: Text(profile.phoneNumber!),
-                              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                              trailing:
+                                  const Icon(Icons.arrow_forward_ios, size: 16),
                               onTap: () => _navigateToEditProfile(profile),
                             ),
                           ],
@@ -402,7 +409,8 @@ class _ProfileViewState extends State<ProfileView> {
                 if (state is ProfileLoaded && state.profile.hasProfilePicture) {
                   return ListTile(
                     leading: const Icon(Icons.delete, color: Colors.red),
-                    title: const Text('Remove Photo', style: TextStyle(color: Colors.red)),
+                    title: const Text('Remove Photo',
+                        style: TextStyle(color: Colors.red)),
                     onTap: () {
                       Navigator.pop(context);
                       _removeProfilePicture();
@@ -431,11 +439,11 @@ class _ProfileViewState extends State<ProfileView> {
         final authState = context.read<AuthBloc>().state;
         if (authState is AuthAuthenticated) {
           context.read<ProfileBloc>().add(
-            UploadProfilePicture(
-              userId: authState.user.id,
-              imageFile: File(image.path),
-            ),
-          );
+                UploadProfilePicture(
+                  userId: authState.user.id,
+                  imageFile: File(image.path),
+                ),
+              );
         }
       }
     } catch (e) {
@@ -452,8 +460,8 @@ class _ProfileViewState extends State<ProfileView> {
     final authState = context.read<AuthBloc>().state;
     if (authState is AuthAuthenticated) {
       context.read<ProfileBloc>().add(
-        DeleteProfilePicture(userId: authState.user.id),
-      );
+            DeleteProfilePicture(userId: authState.user.id),
+          );
     }
   }
 }

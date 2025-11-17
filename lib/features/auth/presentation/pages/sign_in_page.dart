@@ -4,7 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -151,8 +151,8 @@ class _SignInViewState extends State<SignInView> {
       final password = _passwordController.text.trim();
 
       context.read<AuthBloc>().add(
-        SignInWithEmailAndPassword(email: email, password: password),
-      );
+            SignInWithEmailAndPassword(email: email, password: password),
+          );
     }
   }
 }

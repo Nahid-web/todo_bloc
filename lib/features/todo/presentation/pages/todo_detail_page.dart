@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/todo_detail/todo_detail_bloc.dart';
 import '../bloc/todo_detail/todo_detail_event.dart';
 import '../bloc/todo_detail/todo_detail_state.dart';
@@ -53,23 +53,22 @@ class TodoDetailView extends StatelessWidget {
                         break;
                     }
                   },
-                  itemBuilder:
-                      (BuildContext context) => [
-                        const PopupMenuItem<String>(
-                          value: 'edit',
-                          child: ListTile(
-                            leading: Icon(Icons.edit),
-                            title: Text('Edit'),
-                          ),
-                        ),
-                        const PopupMenuItem<String>(
-                          value: 'delete',
-                          child: ListTile(
-                            leading: Icon(Icons.delete),
-                            title: Text('Delete'),
-                          ),
-                        ),
-                      ],
+                  itemBuilder: (BuildContext context) => [
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: ListTile(
+                        leading: Icon(Icons.edit),
+                        title: Text('Edit'),
+                      ),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: ListTile(
+                        leading: Icon(Icons.delete),
+                        title: Text('Delete'),
+                      ),
+                    ),
+                  ],
                 );
               }
               return const SizedBox.shrink();
@@ -119,19 +118,18 @@ class TodoDetailView extends StatelessWidget {
                                   style: Theme.of(
                                     context,
                                   ).textTheme.headlineSmall?.copyWith(
-                                    decoration:
-                                        todo.isCompleted
+                                        decoration: todo.isCompleted
                                             ? TextDecoration.lineThrough
                                             : null,
-                                  ),
+                                      ),
                                 ),
                               ),
                               Checkbox(
                                 value: todo.isCompleted,
                                 onChanged: (_) {
                                   context.read<TodoDetailBloc>().add(
-                                    ToggleTodoCompletionDetail(todo),
-                                  );
+                                        ToggleTodoCompletionDetail(todo),
+                                      );
                                 },
                               ),
                             ],
@@ -168,10 +166,9 @@ class TodoDetailView extends StatelessWidget {
                             context,
                             'Status',
                             todo.isCompleted ? 'Completed' : 'Pending',
-                            icon:
-                                todo.isCompleted
-                                    ? Icons.check_circle
-                                    : Icons.radio_button_unchecked,
+                            icon: todo.isCompleted
+                                ? Icons.check_circle
+                                : Icons.radio_button_unchecked,
                             iconColor:
                                 todo.isCompleted ? Colors.green : Colors.orange,
                           ),

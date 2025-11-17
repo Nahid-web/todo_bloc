@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/di/injection_container.dart';
-import '../../../../shared/widgets/loading_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../bloc/todo_list/todo_list_bloc.dart';
@@ -46,23 +46,22 @@ class _TodoListViewState extends State<TodoListView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:
-            _isSearching
-                ? TextField(
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Search todos...',
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (query) {
-                    if (query.isEmpty) {
-                      context.read<TodoListBloc>().add(ClearSearch());
-                    } else {
-                      context.read<TodoListBloc>().add(SearchTodosEvent(query));
-                    }
-                  },
-                )
-                : const Text('Todo List'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Search todos...',
+                  border: InputBorder.none,
+                ),
+                onChanged: (query) {
+                  if (query.isEmpty) {
+                    context.read<TodoListBloc>().add(ClearSearch());
+                  } else {
+                    context.read<TodoListBloc>().add(SearchTodosEvent(query));
+                  }
+                },
+              )
+            : const Text('Todo List'),
         actions: [
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
@@ -82,16 +81,15 @@ class _TodoListViewState extends State<TodoListView> {
                 context.read<AuthBloc>().add(SignOut());
               }
             },
-            itemBuilder:
-                (BuildContext context) => [
-                  const PopupMenuItem<String>(
-                    value: 'logout',
-                    child: ListTile(
-                      leading: Icon(Icons.logout),
-                      title: Text('Sign Out'),
-                    ),
-                  ),
-                ],
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'logout',
+                child: ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text('Sign Out'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -105,8 +103,8 @@ class _TodoListViewState extends State<TodoListView> {
                   label: 'Undo',
                   onPressed: () {
                     context.read<TodoListBloc>().add(
-                      RestoreTodoEvent(state.deletedTodo),
-                    );
+                          RestoreTodoEvent(state.deletedTodo),
+                        );
                   },
                 ),
               ),
@@ -124,17 +122,15 @@ class _TodoListViewState extends State<TodoListView> {
           if (state is TodoListLoading) {
             return const LoadingWidget();
           } else if (state is TodoListLoaded || state is TodoDeleted) {
-            final todos =
-                state is TodoListLoaded
-                    ? state.todos
-                    : (state as TodoDeleted).todos;
+            final todos = state is TodoListLoaded
+                ? state.todos
+                : (state as TodoDeleted).todos;
 
             if (todos.isEmpty) {
               return MessageDisplay(
-                message:
-                    state is TodoListLoaded && state.isSearching
-                        ? 'No todos found for "${state.searchQuery}"'
-                        : 'No todos yet. Add your first todo!',
+                message: state is TodoListLoaded && state.isSearching
+                    ? 'No todos found for "${state.searchQuery}"'
+                    : 'No todos yet. Add your first todo!',
               );
             }
 
@@ -153,8 +149,8 @@ class _TodoListViewState extends State<TodoListView> {
                     },
                     onToggle: () {
                       context.read<TodoListBloc>().add(
-                        ToggleTodoCompletion(todo.id),
-                      );
+                            ToggleTodoCompletion(todo.id),
+                          );
                     },
                     onDelete: () {
                       _showDeleteConfirmation(context, todo.id, todo.title);
