@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_bloc/firebase_options.dart';
 
-import 'core/di/injection_container.dart' as di;
+import 'core/di/injector.dart' as di;
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'features/settings/presentation/bloc/theme_bloc.dart';
@@ -16,7 +16,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize dependency injection
-  await di.init();
+  await di.initDependencies();
 
   final authNotifier = ValueNotifier<User?>(null);
   FirebaseAuth.instance.authStateChanges().listen((user) {

@@ -1,15 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter/foundation.dart'; // For ValueNotifier
 
-import '../../../features/auth/presentation/pages/auth_page.dart';
-import '../../../features/dashboard/presentation/pages/dashboard_page.dart';
-import '../../../features/navigation/presentation/pages/main_navigation_page.dart';
-import '../../../features/settings/presentation/pages/settings_page.dart';
-import '../../../features/todo/presentation/pages/todo_list_page.dart';
-import '../../../features/todo/presentation/pages/add_edit_todo_page.dart';
-import '../../../features/todo/presentation/pages/todo_detail_page.dart';
+import '../../features/auth/routes/auth_routes.dart';
+import '../../features/todo/routes/todo_routes.dart';
+import '../../features/dashboard/routes/dashboard_routes.dart';
+import '../../features/settings/routes/settings_routes.dart';
 
 GoRouter createAppRouter(ValueNotifier<User?> authNotifier) {
   return GoRouter(
@@ -28,41 +24,10 @@ GoRouter createAppRouter(ValueNotifier<User?> authNotifier) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const AuthPage(),
-      ),
-      ShellRoute(
-        builder: (context, state, child) => MainNavigationPage(child: child),
-        routes: [
-          GoRoute(
-            path: '/',
-            builder: (context, state) => const DashboardPage(),
-          ),
-          GoRoute(
-            path: '/todos',
-            builder: (context, state) => const TodoListPage(),
-            routes: [
-              GoRoute(
-                path: 'add',
-                builder: (context, state) => const AddEditTodoPage(),
-              ),
-              GoRoute(
-                path: 'edit/:todoId',
-                builder: (context, state) => AddEditTodoPage(todoId: state.pathParameters['todoId']!),
-              ),
-              GoRoute(
-                path: 'detail/:todoId',
-                builder: (context, state) => TodoDetailPage(todoId: state.pathParameters['todoId']!),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: '/settings',
-            builder: (context, state) => const SettingsPage(),
-          ),
-        ],
-      ),
+      ...authRoutes,
+      ...dashboardRoutes,
+      ...todoRoutes,
+      ...settingsRoutes,
     ],
   );
 }
