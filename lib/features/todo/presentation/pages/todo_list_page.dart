@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_bloc/core/di/injector.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
@@ -9,8 +9,7 @@ import '../bloc/todo_list/todo_list_bloc.dart';
 import '../bloc/todo_list/todo_list_event.dart';
 import '../bloc/todo_list/todo_list_state.dart';
 import '../widgets/todo_item.dart';
-import 'add_edit_todo_page.dart';
-import 'todo_detail_page.dart';
+
 import 'package:go_router/go_router.dart';
 
 class TodoListPage extends StatelessWidget {

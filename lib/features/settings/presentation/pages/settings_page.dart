@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_bloc/core/di/injector.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
 import '../../../profile/presentation/pages/profile_page.dart';
@@ -66,8 +66,8 @@ class SettingsView extends StatelessWidget {
                             onChanged: (value) {
                               if (value != null) {
                                 context.read<ThemeBloc>().add(
-                                  ThemeChanged(value),
-                                );
+                                      ThemeChanged(value),
+                                    );
                               }
                             },
                             contentPadding: EdgeInsets.zero,
@@ -80,8 +80,8 @@ class SettingsView extends StatelessWidget {
                             onChanged: (value) {
                               if (value != null) {
                                 context.read<ThemeBloc>().add(
-                                  ThemeChanged(value),
-                                );
+                                      ThemeChanged(value),
+                                    );
                               }
                             },
                             contentPadding: EdgeInsets.zero,
@@ -94,8 +94,8 @@ class SettingsView extends StatelessWidget {
                             onChanged: (value) {
                               if (value != null) {
                                 context.read<ThemeBloc>().add(
-                                  ThemeChanged(value),
-                                );
+                                      ThemeChanged(value),
+                                    );
                               }
                             },
                             contentPadding: EdgeInsets.zero,
@@ -314,62 +314,59 @@ class SettingsView extends StatelessWidget {
   void _showSignOutDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Sign Out'),
-            content: const Text('Are you sure you want to sign out?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  context.read<AuthBloc>().add(SignOut());
-                },
-                child: const Text('Sign Out'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<AuthBloc>().add(SignOut());
+            },
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
     );
   }
 
   void _showExportDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Export Data'),
-            content: const Text(
-              'This feature will be available in a future update.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Export Data'),
+        content: const Text(
+          'This feature will be available in a future update.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           ),
+        ],
+      ),
     );
   }
 
   void _showImportDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Import Data'),
-            content: const Text(
-              'This feature will be available in a future update.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK'),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: const Text('Import Data'),
+        content: const Text(
+          'This feature will be available in a future update.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           ),
+        ],
+      ),
     );
   }
 }

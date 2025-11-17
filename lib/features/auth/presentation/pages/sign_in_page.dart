@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:todo_bloc/core/di/injector.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';

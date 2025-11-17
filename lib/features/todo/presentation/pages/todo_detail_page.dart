@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
+import 'package:todo_bloc/core/di/injector.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../bloc/todo_detail/todo_detail_bloc.dart';
 import '../bloc/todo_detail/todo_detail_event.dart';
 import '../bloc/todo_detail/todo_detail_state.dart';
-import 'add_edit_todo_page.dart';
 
 class TodoDetailPage extends StatelessWidget {
   final String todoId;

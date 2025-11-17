@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_bloc/core/di/injector.dart';
 
-import '../../../../core/di/injection_container.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../todo/domain/entities/todo.dart';
 import '../../../todo/presentation/bloc/todo_list/todo_list_bloc.dart';
@@ -88,8 +88,10 @@ class DashboardView extends StatelessWidget {
 
           if (state is TodoListLoaded) {
             final todos = state.todos.where((todo) => !todo.isDeleted).toList();
-            final completedTodos = todos.where((todo) => todo.isCompleted).length;
-            final pendingTodos = todos.where((todo) => !todo.isCompleted).length;
+            final completedTodos =
+                todos.where((todo) => todo.isCompleted).length;
+            final pendingTodos =
+                todos.where((todo) => !todo.isCompleted).length;
             final overdueTodos = todos.where((todo) => todo.isOverdue).length;
             final dueSoonTodos = todos.where((todo) => todo.isDueSoon).length;
 
@@ -167,8 +169,8 @@ class DashboardView extends StatelessWidget {
         Text(
           'Overview',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 16),
         Row(
@@ -239,9 +241,9 @@ class DashboardView extends StatelessWidget {
             Text(
               value,
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
             ),
             Text(
               title,
@@ -260,8 +262,8 @@ class DashboardView extends StatelessWidget {
         Text(
           'Quick Actions',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 16),
         Row(
@@ -320,8 +322,8 @@ class DashboardView extends StatelessWidget {
               Text(
                 title,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ],
           ),
@@ -331,10 +333,8 @@ class DashboardView extends StatelessWidget {
   }
 
   Widget _buildRecentTodosSection(BuildContext context, List<Todo> todos) {
-    final recentTodos = todos
-        .where((todo) => !todo.isCompleted)
-        .take(3)
-        .toList();
+    final recentTodos =
+        todos.where((todo) => !todo.isCompleted).take(3).toList();
 
     if (recentTodos.isEmpty) {
       return const SizedBox.shrink();
@@ -349,8 +349,8 @@ class DashboardView extends StatelessWidget {
             Text(
               'Recent Todos',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             TextButton(
               onPressed: () {
@@ -362,55 +362,57 @@ class DashboardView extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         ...recentTodos.map((todo) => TodoCard(
-          todo: todo,
-          onToggleComplete: () {
-            // Handle toggle complete
-          },
-        )),
+              todo: todo,
+              onToggleComplete: () {
+                // Handle toggle complete
+              },
+            )),
       ],
     );
   }
 
-  Widget _buildOverdueTodosSection(BuildContext context, List<Todo> overdueTodos) {
+  Widget _buildOverdueTodosSection(
+      BuildContext context, List<Todo> overdueTodos) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Overdue Todos',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
         ),
         const SizedBox(height: 8),
         ...overdueTodos.take(3).map((todo) => TodoCard(
-          todo: todo,
-          onToggleComplete: () {
-            // Handle toggle complete
-          },
-        )),
+              todo: todo,
+              onToggleComplete: () {
+                // Handle toggle complete
+              },
+            )),
       ],
     );
   }
 
-  Widget _buildDueSoonTodosSection(BuildContext context, List<Todo> dueSoonTodos) {
+  Widget _buildDueSoonTodosSection(
+      BuildContext context, List<Todo> dueSoonTodos) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Due Soon',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: Colors.orange,
-          ),
+                fontWeight: FontWeight.bold,
+                color: Colors.orange,
+              ),
         ),
         const SizedBox(height: 8),
         ...dueSoonTodos.take(3).map((todo) => TodoCard(
-          todo: todo,
-          onToggleComplete: () {
-            // Handle toggle complete
-          },
-        )),
+              todo: todo,
+              onToggleComplete: () {
+                // Handle toggle complete
+              },
+            )),
       ],
     );
   }
