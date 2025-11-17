@@ -1,0 +1,18 @@
+# Docker build context exclusion
+
+.dart_tool/
+.idea/
+.vscode/
+.git/
+.packages
+.metadata
+
+build/
+linux/
+windows/
+macos/
+ios/
+android/
+
+Dockerfile
+.dockerignore
