@@ -19,9 +19,9 @@ import 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final sign_in_anon_usecase.SignInAnonymously signInAnonymouslyUseCase;
   final sign_in_email_usecase.SignInWithEmailAndPassword
-  signInWithEmailAndPasswordUseCase;
+      signInWithEmailAndPasswordUseCase;
   final create_user_usecase.CreateUserWithEmailAndPassword
-  createUserWithEmailAndPasswordUseCase;
+      createUserWithEmailAndPasswordUseCase;
   final sign_out_usecase.SignOut signOutUseCase;
   final GetCurrentUser getCurrentUserUseCase;
   final AuthRepository authRepository;

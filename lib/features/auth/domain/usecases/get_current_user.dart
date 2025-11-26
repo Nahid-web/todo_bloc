@@ -14,9 +14,9 @@ class GetCurrentUser implements UseCase<User?, NoParams> {
   @override
   Future<Either<Failure, User?>> call(NoParams params) async {
     AppLogger.logAuth('GetCurrentUser - Fetching current user');
-    
+
     final result = await repository.getCurrentUser();
-    
+
     result.fold(
       (failure) => AppLogger.logAuth(
         'GetCurrentUser - Failed',
@@ -24,14 +24,16 @@ class GetCurrentUser implements UseCase<User?, NoParams> {
       ),
       (user) => AppLogger.logAuth(
         'GetCurrentUser - Success',
-        data: user != null ? {
-          'userId': user.id,
-          'email': user.email,
-          'isAnonymous': user.isAnonymous,
-        } : {'user': 'null'},
+        data: user != null
+            ? {
+                'userId': user.id,
+                'email': user.email,
+                'isAnonymous': user.isAnonymous,
+              }
+            : {'user': 'null'},
       ),
     );
-    
+
     return result;
   }
 }
